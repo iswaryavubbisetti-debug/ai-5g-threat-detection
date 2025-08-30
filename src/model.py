@@ -1,9 +1,9 @@
-import numpy as np
 from sklearn.ensemble import IsolationForest
-from tensorflow.keras import layers, models
 
 class AutoencoderModel:
     def __init__(self, input_dim):
+        # Lazy import so TensorFlow loads only if needed
+        from tensorflow.keras import layers, models
         inp = layers.Input(shape=(input_dim,))
         enc = layers.Dense(64, activation="relu")(inp)
         enc = layers.Dense(32, activation="relu")(enc)
@@ -17,7 +17,7 @@ class AutoencoderModel:
 
     def score(self, X):
         recon = self.model.predict(X, verbose=0)
-        return ((X - recon)**2).mean(axis=1)
+        return ((X - recon) ** 2).mean(axis=1)
 
 class IsolationForestModel:
     def __init__(self):
@@ -28,3 +28,4 @@ class IsolationForestModel:
 
     def score(self, X):
         return -self.model.decision_function(X)
+
